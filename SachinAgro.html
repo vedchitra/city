@@ -57,7 +57,7 @@ a:hover {
             text-align: center;}
 
  
-    .download, .dropdown, #festivalBanner,  .form-group, .card vertical, .WE-icon, .WE-links {
+    .download, .dropdown, #festivalBanner,  .formcard, .form-group, .card vertical, .WE-icon, .WE-links2 {
     display: none !important;
   }
   
@@ -94,6 +94,17 @@ a:hover {
     }
     button:hover { background: black; }
 	}
+	
+	.formcard {
+            width: 90%;
+            max-width: 800px;
+            background: white;
+            margin: 20px auto;
+            padding: 15px;
+            border-radius: 15px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
 		
         .Business-Photo-1 {
   width: 100px;
@@ -234,7 +245,10 @@ a:hover {
             font-size: 20px;
             margin-bottom: 5px;
         }
-		.WE-links {
+		.WE-links1 {
+		text-align: center;  
+		}
+		.WE-links2 {
 		text-align: center;  
 		}
 		.WE-icon {
@@ -453,7 +467,8 @@ a:hover {
         <div class="hairline"></div></div>
 		
        <p class="business-description" id="businessDescription"></p>
-	   <div id="WELinks" class="WE-links"></div>
+	   
+<div id="WEContact" class="WE-links1"></div>
 	   
 	   <div class="buttons">
             <a href="tel:7744112255" class="button call"><i class="fas fa-phone"></i> Call</a>
@@ -469,7 +484,9 @@ a:hover {
                                         <a href="https://yt.com" class="social-icon"><i class="fab fa-youtube"></i><br>YouTube</a>
                                         <a href="https://fb.com" class="social-icon"><i class="fab fa-facebook"></i><br>Facebook</a>
             			                <a href="https://in.com" class="social-icon"><i class="fab fa-instagram"></i><br>Instagram</a>
-                    </div>
+                    </div><br>
+		
+<div id="WEActions" class="WE-links2"></div>
     </div>
 	
 	
@@ -484,17 +501,17 @@ a:hover {
   </div>
 
   <div class="photo-card" id="photoCard3">
-    <img src="" alt="Business Photo 3"> 
+    <img src="https://city.bizc.in/assets/images/SachinAgrop4.jpg" alt="Business Photo 3"> 
     <div class="photo-caption">सचिन एग्रो</div>
   </div>
   
   <div class="photo-card" id="photoCard4">
-    <img src="https://vedchitra.github.io/city/assets/images/ShreeGaneshClinicp5.jpg" alt="Business Photo 4">
+    <img src="https://city.bizc.in/assets/images/SachinAgrop5.jpg" alt="Business Photo 4">
     <div class="photo-caption">सचिन एग्रो</div>
   </div>
 
   <div class="photo-card" id="photoCard5">
-    <img src="" alt="Business Photo 5"> 
+    <img src="https://city.bizc.in/assets/images/SachinAgrop6.jpg" alt="Business Photo 5"> 
     <div class="photo-caption">सचिन एग्रो</div>
   </div>
 
@@ -525,7 +542,7 @@ a:hover {
     <div class="photo-caption">सचिन एग्रो : Youtube Video</div>
 </div>
 
-<div class="card">
+<div class="formcard">
 
 <h2>Enquiry Form</h2>
   <form id="whatsappForm">
@@ -831,7 +848,7 @@ a:hover {
       }
 
       
-      const whatsappNumber = "7744112255";
+      const whatsappNumber = "917744112255";
 
       
       const text = `*New Enquiry*\n\n*Name:* ${name}\n*WhatsApp Number:* ${number}\n*Message:* ${message}`;
@@ -845,22 +862,21 @@ a:hover {
   </script>
 
 
-<div id="WELinks" class="WE-links"></div>
 
 <script>
-const websiteLink = "https:\/\/web.com";
-const emailID     = "sachinpatil3546@gmail.com";
-const businessNameEnglish = "Sachin Agro";
+const websiteLink          = "https:\/\/web.com";
+const emailID              = "sachinpatil3546@gmail.com";
+const businessNameEnglish  = "Sachin Agro";
 
 
 document.title = businessNameEnglish + " - Business Details";
 
 
-let htmlContent = "";
+let contactHtml = "";
 
 
 if (websiteLink) {
-  htmlContent += `
+  contactHtml += `
     <a href="${websiteLink}" class="WE-icon" target="_blank">
       <i class="fas fa-globe"></i> Website
     </a>
@@ -869,31 +885,37 @@ if (websiteLink) {
 
 
 if (emailID) {
-  htmlContent += `
+  contactHtml += `
     <a href="mailto:${emailID}" class="WE-icon">
       <i class="fas fa-envelope"></i> Email
-    </a><br><br>
+    </a>
   `;
 }
 
 
+document.getElementById("WEContact").innerHTML = contactHtml;
 
 
-htmlContent += `
+
+let actionsHtml = "";
+
+
+actionsHtml += `
   <a href="javascript:void(0)" id="downloadPdfBtn" class="WE-icon">
     <i class="fa-solid fa-file-pdf"></i> Download PDF
   </a>
 `;
 
 
-
-htmlContent += `
+actionsHtml += `
   <a href="javascript:void(0)" id="shareBtn" class="WE-icon">
     <i class="fa-solid fa-share-nodes"></i> Share to Friend
   </a>
 `;
 
-document.getElementById("WELinks").innerHTML = htmlContent;
+
+document.getElementById("WEActions").innerHTML = actionsHtml;
+
 
 
 document.addEventListener("click", async (e) => {
