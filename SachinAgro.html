@@ -419,7 +419,7 @@ a:hover {
             <div class="Business-Photo-1" id="businessPhoto1"></div>
 
         </div>
-        <div class="name">Sachin</div>
+        <div class="name">Sachin Patil</div>
         <div class="business-name"><a href="tel:7744112255">सचिन एग्रो</a></div>
         <p class="business-address">907, Ravalnath Colony, Ajara</p>
 		
@@ -678,7 +678,7 @@ a:hover {
 			<h3 id="messageLine1"></h3>
             <strong id="messageLine2"></strong>
                 <h2>सचिन एग्रो</h2>
-                <h3>Sachin</h3>
+                <h3>Sachin Patil</h3>
                 <strong>Address : 907, Ravalnath Colony, Ajara</strong><br>
                 <strong class="non-clickable"><i class="fas fa-phone icon"></i>  7744112255</strong>
             </div>
@@ -789,7 +789,7 @@ a:hover {
 
 <script>
 const websiteLink = "https:\/\/web.com";
-const emailID     = "";
+const emailID     = "sachinpatil3546@gmail.com";
 const businessNameEnglish = "Sachin Agro";
 
 
@@ -812,21 +812,24 @@ if (emailID) {
   htmlContent += `
     <a href="mailto:${emailID}" class="WE-icon">
       <i class="fas fa-envelope"></i> Email
-    </a>
+    </a><br><br>
   `;
 }
 
 
-htmlContent += `
-  <a href="javascript:void(0)" id="shareBtn" class="WE-icon">
-    <i class="fa-solid fa-share-nodes"></i> Share to Friend
-  </a>
-`;
 
 
 htmlContent += `
   <a href="javascript:void(0)" id="downloadPdfBtn" class="WE-icon">
     <i class="fa-solid fa-file-pdf"></i> Download PDF
+  </a>
+`;
+
+
+
+htmlContent += `
+  <a href="javascript:void(0)" id="shareBtn" class="WE-icon">
+    <i class="fa-solid fa-share-nodes"></i> Share to Friend
   </a>
 `;
 
@@ -907,7 +910,7 @@ document.addEventListener("click", async (e) => {
       }
 
       document.getElementById('downloadVCF').addEventListener('click', function() {
-        const personName = "Sachin";
+        const personName = "Sachin Patil";
         const businessName = "सचिन एग्रो";
         const mobileNumber = "7744112255";
         const businessAddress = "907, Ravalnath Colony, Ajara";
