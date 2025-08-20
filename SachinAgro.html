@@ -42,6 +42,23 @@ a:hover {
             border-top-right-radius: 15px;
             position: relative;
         }
+		
+		@media print {
+  body {
+  -webkit-print-color-adjust: exact !important;  
+  print-color-adjust: exact !important;          
+  color-adjust: exact !important;                
+  background: white !important;
+}
+
+ 
+   .download, .dropdown, #festivalBanner, .WE-icon, .WE-links {
+    display: none !important;
+  }
+  
+}
+		
+		
         .Business-Photo-1 {
   width: 100px;
   height: 100px;
@@ -423,7 +440,7 @@ a:hover {
   </div>
   
   <div class="photo-card" id="photoCard4">
-    <img src="" alt="Business Photo 4">
+    <img src="https://vedchitra.github.io/city/assets/images/ShreeGaneshClinicp5.jpg" alt="Business Photo 4">
     <div class="photo-caption">Sachin Agro</div>
   </div>
 
@@ -683,9 +700,9 @@ a:hover {
 <script>
     
     let videos = [
+        "https:\/\/www.youtube.com\/watch?v=t2pvxgXzGZc",
         "",
-        "",
-        "",
+        "https:\/\/m.youtube.com\/watch?v=9pGOCtXvHII\x26pp=ygUVODAgYWNjdXJhY3kgaW5kaWNhdG9y0gcJCc0JAYcqIYzv",
         "",
         "",
     ];
