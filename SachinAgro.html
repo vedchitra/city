@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sachin Agro - Business Details</title>
+    <title>सचिन एग्रो - Business Details</title>
     <meta name="description" content="&lt;p&gt;आमच्याकडे सर्व प्रकारचे रोपे योग्य दरात मिळतील. गुलाब, निशिगंधा, जास्वंद, मनी प्लांट, इतर शोभिवंत झाडे, आयुर्वेदिक वनस्पती तसेच आंबा, काजू, पेरू, चिकू, सिताफळ, नारळ, लिंबू, डाळींब, जांभूळ वैगेरे फळझाडांची रोपे मिळतील.&lt;/p&gt;">
     <meta property="og:image" content="https://city.bizc.in/assets/images/SachinAgrop1.jpg">
 
@@ -420,7 +420,7 @@ a:hover {
 
         </div>
         <div class="name">Sachin</div>
-        <div class="business-name"><a href="tel:7744112255">Sachin Agro</a></div>
+        <div class="business-name"><a href="tel:7744112255">सचिन एग्रो</a></div>
         <p class="business-address">907, Ravalnath Colony, Ajara</p>
 		
 		<div class="print-contacts" style="display:none;">
@@ -461,54 +461,54 @@ a:hover {
 	
 	<div class="photo-card" id="photoCard1">
     <img src="https://city.bizc.in/assets/images/SachinAgrop2.jpg" alt="Business Photo 1">
-    <div class="photo-caption">Sachin Agro</div>
+    <div class="photo-caption">सचिन एग्रो</div>
   </div>
   
   <div class="photo-card" id="photoCard2">
     <img src="https://city.bizc.in/assets/images/SachinAgrop3.jpg" alt="Business Photo 2">
-    <div class="photo-caption">Sachin Agro</div>
+    <div class="photo-caption">सचिन एग्रो</div>
   </div>
 
   <div class="photo-card" id="photoCard3">
     <img src="" alt="Business Photo 3"> 
-    <div class="photo-caption">Sachin Agro</div>
+    <div class="photo-caption">सचिन एग्रो</div>
   </div>
   
   <div class="photo-card" id="photoCard4">
     <img src="https://vedchitra.github.io/city/assets/images/ShreeGaneshClinicp5.jpg" alt="Business Photo 4">
-    <div class="photo-caption">Sachin Agro</div>
+    <div class="photo-caption">सचिन एग्रो</div>
   </div>
 
   <div class="photo-card" id="photoCard5">
     <img src="" alt="Business Photo 5"> 
-    <div class="photo-caption">Sachin Agro</div>
+    <div class="photo-caption">सचिन एग्रो</div>
   </div>
 
   
 	
 <div class="photo-card" id="ytVideoCard1" style="display:none;">
     <div id="ytVideoContainer1"></div>
-    <div class="photo-caption">Sachin Agro : Youtube Video</div>
+    <div class="photo-caption">सचिन एग्रो : Youtube Video</div>
 </div>
 
 <div class="photo-card" id="ytVideoCard2" style="display:none;">
     <div id="ytVideoContainer2"></div>
-    <div class="photo-caption">Sachin Agro : Youtube Video</div>
+    <div class="photo-caption">सचिन एग्रो : Youtube Video</div>
 </div>
 
 <div class="photo-card" id="ytVideoCard3" style="display:none;">
     <div id="ytVideoContainer3"></div>
-    <div class="photo-caption">Sachin Agro : Youtube Video</div>
+    <div class="photo-caption">सचिन एग्रो : Youtube Video</div>
 </div>
 
 <div class="photo-card" id="ytVideoCard4" style="display:none;">
     <div id="ytVideoContainer4"></div>
-    <div class="photo-caption">Sachin Agro : Youtube Video</div>
+    <div class="photo-caption">सचिन एग्रो : Youtube Video</div>
 </div>
 
 <div class="photo-card" id="ytVideoCard5" style="display:none;">
     <div id="ytVideoContainer5"></div>
-    <div class="photo-caption">Sachin Agro : Youtube Video</div>
+    <div class="photo-caption">सचिन एग्रो : Youtube Video</div>
 </div>
 
 
@@ -677,7 +677,7 @@ a:hover {
             <div class="festival-details">
 			<h3 id="messageLine1"></h3>
             <strong id="messageLine2"></strong>
-                <h2>Sachin Agro</h2>
+                <h2>सचिन एग्रो</h2>
                 <h3>Sachin</h3>
                 <strong>Address : 907, Ravalnath Colony, Ajara</strong><br>
                 <strong class="non-clickable"><i class="fas fa-phone icon"></i>  7744112255</strong>
@@ -785,9 +785,15 @@ a:hover {
 </script>
 
 
+<div id="WELinks" class="WE-links"></div>
+
 <script>
 const websiteLink = "https:\/\/web.com";
-const emailID = "";
+const emailID     = "";
+const businessNameEnglish = "Sachin Agro";
+
+
+document.title = businessNameEnglish + " - Business Details";
 
 
 let htmlContent = "";
@@ -813,7 +819,14 @@ if (emailID) {
 
 htmlContent += `
   <a href="javascript:void(0)" id="shareBtn" class="WE-icon">
-    <i class="fa-solid fa-share-nodes"></i> Share
+    <i class="fa-solid fa-share-nodes"></i> Share to Friend
+  </a>
+`;
+
+
+htmlContent += `
+  <a href="javascript:void(0)" id="downloadPdfBtn" class="WE-icon">
+    <i class="fa-solid fa-file-pdf"></i> Download PDF
   </a>
 `;
 
@@ -821,10 +834,11 @@ document.getElementById("WELinks").innerHTML = htmlContent;
 
 
 document.addEventListener("click", async (e) => {
+  
   if (e.target.closest("#shareBtn")) {
     const shareData = {
       title: document.title,
-      text: "Sachin Agro | Address: 907, Ravalnath Colony, Ajara | Contact Number: 7744112255 | Visit: ",
+      text: "सचिन एग्रो | Address: 907, Ravalnath Colony, Ajara | Contact Number: 7744112255 | Visit: ",
       url: window.location.href
     };
 
@@ -839,8 +853,14 @@ document.addEventListener("click", async (e) => {
       alert("Sharing is not supported on this browser. Copy this link:\n" + window.location.href);
     }
   }
+
+  
+  if (e.target.closest("#downloadPdfBtn")) {
+    window.print(); 
+  }
 });
 </script>
+
 
 
   <script>
@@ -888,7 +908,7 @@ document.addEventListener("click", async (e) => {
 
       document.getElementById('downloadVCF').addEventListener('click', function() {
         const personName = "Sachin";
-        const businessName = "Sachin Agro";
+        const businessName = "सचिन एग्रो";
         const mobileNumber = "7744112255";
         const businessAddress = "907, Ravalnath Colony, Ajara";
         const websiteLink = "https:\/\/web.com";
