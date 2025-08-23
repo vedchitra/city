@@ -2,15 +2,16 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- ✅ Mobile scaling -->
   <title>Reload Page</title>
   <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
     body {
-      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      font-family: 'Roboto', Arial, Segoe UI, Tahoma, Geneva, Verdana, sans-serif;
       margin: 0;
       padding: 0;
-      background: #fff;
+      background: linear-gradient(135deg, #f0f4ff, #e0eaff);
       display: flex;
       justify-content: center;
       align-items: center;
@@ -19,14 +20,14 @@
     }
     .container {
       background: #fff;
-      padding: 40px;
+      padding: 30px;
       border-radius: 20px;
       box-shadow: 0 10px 30px rgba(0,0,0,0.1);
       max-width: 700px;
-      width: 100%;
+      width: 90%; /* ✅ Flexible width */
     }
     h1 {
-      font-size: 2rem;
+      font-size: 1.8rem;
       margin-bottom: 10px;
       color: #2b4eff;
     }
@@ -54,13 +55,13 @@
     }
     h2 {
       margin-top: 40px;
-      font-size: 1.5rem;
+      font-size: 1.3rem;
       color: #333;
     }
     .features {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 10px 30px;
+      gap: 12px 25px;
       margin-top: 20px;
       text-align: left;
     }
@@ -73,11 +74,23 @@
     .feature i {
       margin-right: 8px;
       color: #2b4eff;
+      min-width: 20px;
+      text-align: center;
+    }
+
+    /* ✅ Mobile adjustments */
+    @media (max-width: 600px) {
+      h1 { font-size: 1.5rem; }
+      .container { padding: 20px; }
+      .features {
+        grid-template-columns: 1fr; /* stack features in one column */
+      }
+      .feature { font-size: 0.95rem; }
     }
   </style>
 </head>
 <body>
-  <div class="container">
+<div class="container">
     <h1>Reload Page</h1>
     <p class="instruction">जर डिजिटल बिझनेस कार्ड व मिनी वेबसाइट अजूनही लोड झाली नसल्यास खालील Reload बटन प्रेस करून बघा. काही मिनिटात पेज लोड होईल.</p>
     <button onclick="reloadPage()"><i class="fas fa-sync-alt"></i> Reload</button>
