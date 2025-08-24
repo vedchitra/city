@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Win Computer  - Business Details</title>
-    <meta name="description" content="&lt;p&gt;आमच्याकडे Dell, HP, Lenovo, Acer, Asus अशा नामवंत कंपन्याचे लेटेस्ट लॅपटॉप्स व डेस्कटॉप्स कॉम्प्यूटर्स मिळतात. तसेच सर्व प्रकारच्या कॉम्प्यूटर ॲक्सेसरीज, प्रिंटर्स / स्कॅनर देखील विक्रीसाठी उपलब्ध. विक्रीपश्चात दुरुस्तीची सेवाही दिली जाते.&lt;/p&gt;">
+    <meta name="description" content="&lt;p&gt;आमच्याकडे लेडीज वियर, ड्रेस मटेरिअल, गाऊन, लेगिन्स, अंडर गारमेंट, सौंदर्यप्रसाधने, मेकअप साहीत्य, इमिटेशन ज्वेलरी, भेट वस्तू, सजावटीचे साहीत्य तसेच टेलरिंग साठी लागणारे साहित्य योग्य दरात मिळेल. &lt;/p&gt;">
     <meta property="og:image" content="https://city.bizc.in/assets/images/WinComputerp1.png">
 
-    <link rel="icon" type="image/png" href="https://city.bizc.in/assets/images/WinComputerp1.png">
+    <link rel="icon" type="image/png" href="https://city.bizc.in/assets/images/WinComputerp4.jpg">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
@@ -490,7 +490,7 @@ a:hover {
 	
 	
 	<div class="photo-card" id="photoCard1">
-    <img src="https://city.bizc.in/assets/images/WinComputerp2.png" alt="Business Photo 1">
+    <img src="https://city.bizc.in/assets/images/WinComputerp2.jpg" alt="Business Photo 1">
     <div class="photo-caption">Win Computer </div>
   </div>
   
@@ -967,37 +967,15 @@ document.addEventListener("click", async (e) => {
 
 
 <script>
-  window.onload = function () {
-    
-    window.location.reload(true);
-  };
-</script>
-
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-  const timestamp = new Date().getTime();
-
-  
-  document.querySelectorAll("img").forEach(img => {
-    const url = new URL(img.src, window.location.origin);
-    url.searchParams.set("v", timestamp);
-    img.src = url.toString();
+  window.addEventListener("load", function() {
+    const ts = new Date().getTime(); 
+    document.querySelectorAll("img").forEach(el => {
+      const src = el.getAttribute("src");
+      if (src) {
+        el.src = src + (src.includes("?") ? "&" : "?") + "ts=" + ts;
+      }
+    });
   });
-
-  
-  document.querySelectorAll("link[rel='stylesheet']").forEach(link => {
-    const url = new URL(link.href, window.location.origin);
-    url.searchParams.set("v", timestamp);
-    link.href = url.toString();
-  });
-
-  
-  document.querySelectorAll("script[src]").forEach(script => {
-    const url = new URL(script.src, window.location.origin);
-    url.searchParams.set("v", timestamp);
-    script.src = url.toString();
-  });
-});
 </script>
 
 
@@ -1006,7 +984,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	
 <script>
   
-  var businessDescription = `'\x3cp\x3eआमच्याकडे Dell, HP, Lenovo, Acer, Asus अशा नामवंत कंपन्याचे लेटेस्ट लॅपटॉप्स व डेस्कटॉप्स कॉम्प्यूटर्स मिळतात. तसेच सर्व प्रकारच्या कॉम्प्यूटर ॲक्सेसरीज, प्रिंटर्स \/ स्कॅनर देखील विक्रीसाठी उपलब्ध. विक्रीपश्चात दुरुस्तीची सेवाही दिली जाते.\x3c\/p\x3e'`;
+  var businessDescription = `'\x3cp\x3eआमच्याकडे लेडीज वियर, ड्रेस मटेरिअल, गाऊन, लेगिन्स, अंडर गारमेंट, सौंदर्यप्रसाधने, मेकअप साहीत्य, इमिटेशन ज्वेलरी, भेट वस्तू, सजावटीचे साहीत्य तसेच टेलरिंग साठी लागणारे साहित्य योग्य दरात मिळेल. \x3c\/p\x3e'`;
 
   
   businessDescription = businessDescription.replace(/^'(.*)'$/, "$1");
