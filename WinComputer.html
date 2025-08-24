@@ -4,8 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Win Computer  - Business Details</title>
-    <meta name="description" content="&lt;p&gt;आमच्याकडे सर्व प्रकारचे फर्निचर जसे सोफा सेट, बेड, सिंगल कपाट, कंपनी कपाट, वॉलड्रॉप कपाट, राजराणी कपाट, शोकेस, डायनिंग टेबल, ऑफीस टेबल, ड्रेसिंग टेबल, चेअर, पाट-चौरंग, देव्हारे, रॅक असे फर्निचर अगदी योग्य दरात मिळतील.&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt; याशिवाय आमच्याकडे दुकान, हॉस्पिटल यासाठी लागणारे फर्निचर देखील उपलब्ध.&lt;/p&gt;">
+    <meta name="description" content="&lt;p&gt;आमच्याकडे Dell, HP, Lenovo, Acer, Asus अशा नामवंत कंपन्याचे लेटेस्ट लॅपटॉप्स व डेस्कटॉप्स कॉम्प्यूटर्स मिळतात. तसेच सर्व प्रकारच्या कॉम्प्यूटर ॲक्सेसरीज, प्रिंटर्स / स्कॅनर देखील विक्रीसाठी उपलब्ध. विक्रीपश्चात दुरुस्तीची सेवाही दिली जाते.&lt;/p&gt;">
+    <meta property="og:image" content="https://city.bizc.in/assets/images/WinComputerp1.png">
 
+    <link rel="icon" type="image/png" href="https://city.bizc.in/assets/images/WinComputerp1.png">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
@@ -964,7 +966,39 @@ document.addEventListener("click", async (e) => {
 </script>
 
 
+<script>
+  window.onload = function () {
+    
+    window.location.reload(true);
+  };
+</script>
 
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const timestamp = new Date().getTime();
+
+  
+  document.querySelectorAll("img").forEach(img => {
+    const url = new URL(img.src, window.location.origin);
+    url.searchParams.set("v", timestamp);
+    img.src = url.toString();
+  });
+
+  
+  document.querySelectorAll("link[rel='stylesheet']").forEach(link => {
+    const url = new URL(link.href, window.location.origin);
+    url.searchParams.set("v", timestamp);
+    link.href = url.toString();
+  });
+
+  
+  document.querySelectorAll("script[src]").forEach(script => {
+    const url = new URL(script.src, window.location.origin);
+    url.searchParams.set("v", timestamp);
+    script.src = url.toString();
+  });
+});
+</script>
 
 
 
@@ -972,7 +1006,7 @@ document.addEventListener("click", async (e) => {
 	
 <script>
   
-  var businessDescription = `'\x3cp\x3eआमच्याकडे सर्व प्रकारचे फर्निचर जसे सोफा सेट, बेड, सिंगल कपाट, कंपनी कपाट, वॉलड्रॉप कपाट, राजराणी कपाट, शोकेस, डायनिंग टेबल, ऑफीस टेबल, ड्रेसिंग टेबल, चेअर, पाट-चौरंग, देव्हारे, रॅक असे फर्निचर अगदी योग्य दरात मिळतील.\x3c\/p\x3e\x3cp\x3e\x3cbr\x3e\x3c\/p\x3e\x3cp\x3e याशिवाय आमच्याकडे दुकान, हॉस्पिटल यासाठी लागणारे फर्निचर देखील उपलब्ध.\x3c\/p\x3e'`;
+  var businessDescription = `'\x3cp\x3eआमच्याकडे Dell, HP, Lenovo, Acer, Asus अशा नामवंत कंपन्याचे लेटेस्ट लॅपटॉप्स व डेस्कटॉप्स कॉम्प्यूटर्स मिळतात. तसेच सर्व प्रकारच्या कॉम्प्यूटर ॲक्सेसरीज, प्रिंटर्स \/ स्कॅनर देखील विक्रीसाठी उपलब्ध. विक्रीपश्चात दुरुस्तीची सेवाही दिली जाते.\x3c\/p\x3e'`;
 
   
   businessDescription = businessDescription.replace(/^'(.*)'$/, "$1");
