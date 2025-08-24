@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>रामकृष्ण Electronics - Business Details</title>
-    <meta name="description" content="&lt;p&gt;आमच्याकडे सर्व प्रकारची गृहोपयोगी ईलेक्ट्रॉनिक्स उपकरणे मिळतील. फ्रिज, वॉशिंग मशीन, टीव्ही, CCTV कॅमेरे, मिक्सर, ईस्री, फॅन, ईलेक्ट्रॉनिक शेगडी, गॅस शेगडी, ओव्हन, इन्व्हर्टर, सोलर उपकरणे उपलब्ध.&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt; याशिवाय ईलेक्ट्रॉनिक्स वस्तुंची दुरूस्ती विषयक सेवासुद्धा आमच्याकडे उपलब्द.&lt;/p&gt;">
-    <meta property="og:image" content="https://city.bizc.in/assets/images/RamkrishnaStorep1.jpg">
+    <meta name="description" content="&lt;p&gt;आमच्याकडे सर्व प्रकरचा किराणा माल उपलब्ध असतो. आमच्याकडे दर्जेदार धान्य, डाळी, मसाला, चहा -कॉफी पावडर, सुकामेवा, बिस्किटे, हवाबंद पदार्थ याशिवाय डिटर्जंट, साबण, टूथपेस्ट, सौंदर्य प्रसादने आणि गृहोपयोगी वस्तू योग्य दरात मिळतील. &lt;/p&gt;">
+    <meta property="og:image" content="https://city.bizc.in/assets/images/RamkrishnaStorep1.png">
 
-    <link rel="icon" type="image/png" href="https://city.bizc.in/assets/images/RamkrishnaStorep1.jpg">
+    <link rel="icon" type="image/png" href="https://city.bizc.in/assets/images/RamkrishnaStorep1.png">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
@@ -762,7 +762,7 @@ a:hover {
   
   <script>
   document.addEventListener("DOMContentLoaded", function () {
-    const imageUrl = "https:\/\/city.bizc.in\/assets\/images\/RamkrishnaStorep1.jpg"; 
+    const imageUrl = "https:\/\/city.bizc.in\/assets\/images\/RamkrishnaStorep1.png"; 
     const div = document.getElementById("businessPhoto1");
 
     const img = new Image();
@@ -968,19 +968,23 @@ document.addEventListener("click", async (e) => {
 
 <script>
   window.addEventListener("load", function() {
-    if (!window.location.search.includes("ts=")) {
-      const ts = new Date().getTime();
-      window.location.href = window.location.pathname + "?ts=" + ts;
-    }
+    const ts = new Date().getTime(); 
+    document.querySelectorAll("img").forEach(el => {
+      const src = el.getAttribute("src");
+      if (src) {
+        el.src = src + (src.includes("?") ? "&" : "?") + "ts=" + ts;
+      }
+    });
   });
 </script>
+
 
 
 
 	
 <script>
   
-  var businessDescription = `'\x3cp\x3eआमच्याकडे सर्व प्रकारची गृहोपयोगी ईलेक्ट्रॉनिक्स उपकरणे मिळतील. फ्रिज, वॉशिंग मशीन, टीव्ही, CCTV कॅमेरे, मिक्सर, ईस्री, फॅन, ईलेक्ट्रॉनिक शेगडी, गॅस शेगडी, ओव्हन, इन्व्हर्टर, सोलर उपकरणे उपलब्ध.\x3c\/p\x3e\x3cp\x3e\x3cbr\x3e\x3c\/p\x3e\x3cp\x3e याशिवाय ईलेक्ट्रॉनिक्स वस्तुंची दुरूस्ती विषयक सेवासुद्धा आमच्याकडे उपलब्द.\x3c\/p\x3e'`;
+  var businessDescription = `'\x3cp\x3eआमच्याकडे सर्व प्रकरचा किराणा माल उपलब्ध असतो. आमच्याकडे दर्जेदार धान्य, डाळी, मसाला, चहा -कॉफी पावडर, सुकामेवा, बिस्किटे, हवाबंद पदार्थ याशिवाय डिटर्जंट, साबण, टूथपेस्ट, सौंदर्य प्रसादने आणि गृहोपयोगी वस्तू योग्य दरात मिळतील. \x3c\/p\x3e'`;
 
   
   businessDescription = businessDescription.replace(/^'(.*)'$/, "$1");
