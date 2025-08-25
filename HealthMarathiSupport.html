@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Health Marathi Support - Business Details</title>
-    <meta name="description" content="&lt;p&gt;आमचे हॉस्पिटल आपल्या कुटुंबाच्या आरोग्यासाठी सर्वोत्तम सेवा प्रदान करते. आमच्याकडे अनुभवी आणि कुशल डॉक्टर आहेत जे आपल्याला सर्व प्रकारच्या आरोग्य समस्यांमध्ये मदत करू शकतात.&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;आमच्या हॉस्पिटलमध्ये ताप, सर्दी, खोकला, डोकेदुखी, पोटदुखी, अतिसार, उलट्या, मूळव्याध, बद्धकोष्ठता, मुतखडा, कावीळ, टायफॉइड, डेंग्यू, मलेरिया, अंगदुखी, सांधेदुखी, अस्थमा, लठ्ठपणा, उच्च रक्तदाब, मधुमेह अशा अनेक आरोग्य समस्यांवर उपचार केले जातात.&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;Dr. (Full Name)&lt;/p&gt;&lt;p&gt;Qualification - ( M.D. / M.B.B.S. / B.A.M.S. / B.H.M.S. etc)&lt;/p&gt;&lt;p&gt;Registration No. (Number)&lt;/p&gt;">
+    <meta name="description" content="&lt;p&gt;विविध आजारांवर तज्ञ डॉक्टरांकडून आयुर्वेदिक उपचार उपलब्ध. हॉस्पिटलमध्ये पंचकर्म आणि मुळव्याधवरील क्षारसूत्र चिकित्सा उपलब्ध आहे.&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;मुळव्याध, फिशर, भगंदर, बद्धकोष्ठता, मुतखडा, पित्ताशयातील खडे, पित्ताच्या समस्या, शीतपित्त, त्वचेच्या समस्या, मधुमेह, उच्च रक्तदाब, लठ्ठपणा, झोपेच्या तक्रारी, थायरॉईड, संधीवात, आमवात, युरिक ऍसिडचा त्रास, गुडघेदुखी, मायग्रेन, फिट येणे, अस्थमा अशा विविध आजारांवर तज्ञ डॉक्टरांकडून आयुर्वेदिक उपचार उपलब्ध.&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;Dr. (Full Name)&lt;/p&gt;&lt;p&gt;Qualification - M.D. (Ayu.), B.A.M.S.&lt;/p&gt;&lt;p&gt;Registration No. (Number)&lt;/p&gt;">
     <meta property="og:image" content="https://city.bizc.in/assets/images/HealthMarathiSupportp1.png">
 
     <link rel="icon" type="image/png" href="https://city.bizc.in/assets/images/HealthMarathiSupportp1.png">
@@ -495,7 +495,7 @@ a:hover {
   </div>
   
   <div class="photo-card" id="photoCard2">
-    <img src="https://city.bizc.in/assets/images/HealthMarathiSupportp3.jpg" alt="Business Photo 2">
+    <img src="https://city.bizc.in/assets/images/HealthMarathiSupportp3.webp" alt="Business Photo 2">
     <div class="photo-caption">Health Marathi Support</div>
   </div>
 
@@ -972,25 +972,43 @@ document.addEventListener("click", async (e) => {
 </script>
 
 
+
 <script>
   window.addEventListener("load", function() {
-    const ts = new Date().getTime(); 
+    const ts = Date.now(); 
+
+    
     document.querySelectorAll("img").forEach(el => {
       const src = el.getAttribute("src");
       if (src) {
         el.src = src + (src.includes("?") ? "&" : "?") + "ts=" + ts;
       }
     });
+
+    
+    const ogImg = document.querySelector("meta[property='og:image']");
+    if (ogImg) {
+      const content = ogImg.getAttribute("content");
+      if (content) {
+        ogImg.setAttribute("content", content + (content.includes("?") ? "&" : "?") + "ts=" + ts);
+      }
+    }
+
+    
+    const favicon = document.querySelector("link[rel='icon']");
+    if (favicon) {
+      const href = favicon.getAttribute("href");
+      if (href) {
+        favicon.setAttribute("href", href + (href.includes("?") ? "&" : "?") + "ts=" + ts);
+      }
+    }
   });
 </script>
-
-
-
 
 	
 <script>
   
-  var businessDescription = `'\x3cp\x3eआमचे हॉस्पिटल आपल्या कुटुंबाच्या आरोग्यासाठी सर्वोत्तम सेवा प्रदान करते. आमच्याकडे अनुभवी आणि कुशल डॉक्टर आहेत जे आपल्याला सर्व प्रकारच्या आरोग्य समस्यांमध्ये मदत करू शकतात.\x3c\/p\x3e\x3cp\x3e\x3cbr\x3e\x3c\/p\x3e\x3cp\x3eआमच्या हॉस्पिटलमध्ये ताप, सर्दी, खोकला, डोकेदुखी, पोटदुखी, अतिसार, उलट्या, मूळव्याध, बद्धकोष्ठता, मुतखडा, कावीळ, टायफॉइड, डेंग्यू, मलेरिया, अंगदुखी, सांधेदुखी, अस्थमा, लठ्ठपणा, उच्च रक्तदाब, मधुमेह अशा अनेक आरोग्य समस्यांवर उपचार केले जातात.\x3c\/p\x3e\x3cp\x3e\x3cbr\x3e\x3c\/p\x3e\x3cp\x3eDr. \(Full Name\)\x3c\/p\x3e\x3cp\x3eQualification - \( M.D. \/ M.B.B.S. \/ B.A.M.S. \/ B.H.M.S. etc\)\x3c\/p\x3e\x3cp\x3eRegistration No. \(Number\)\x3c\/p\x3e'`;
+  var businessDescription = `'\x3cp\x3eविविध आजारांवर तज्ञ डॉक्टरांकडून आयुर्वेदिक उपचार उपलब्ध. हॉस्पिटलमध्ये पंचकर्म आणि मुळव्याधवरील क्षारसूत्र चिकित्सा उपलब्ध आहे.\x3c\/p\x3e\x3cp\x3e\x3cbr\x3e\x3c\/p\x3e\x3cp\x3eमुळव्याध, फिशर, भगंदर, बद्धकोष्ठता, मुतखडा, पित्ताशयातील खडे, पित्ताच्या समस्या, शीतपित्त, त्वचेच्या समस्या, मधुमेह, उच्च रक्तदाब, लठ्ठपणा, झोपेच्या तक्रारी, थायरॉईड, संधीवात, आमवात, युरिक ऍसिडचा त्रास, गुडघेदुखी, मायग्रेन, फिट येणे, अस्थमा अशा विविध आजारांवर तज्ञ डॉक्टरांकडून आयुर्वेदिक उपचार उपलब्ध.\x3c\/p\x3e\x3cp\x3e\x3cbr\x3e\x3c\/p\x3e\x3cp\x3eDr. \(Full Name\)\x3c\/p\x3e\x3cp\x3eQualification - M.D. \(Ayu.\), B.A.M.S.\x3c\/p\x3e\x3cp\x3eRegistration No. \(Number\)\x3c\/p\x3e'`;
 
   
   businessDescription = businessDescription.replace(/^'(.*)'$/, "$1");
