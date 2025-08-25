@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Yogita Hotel, Ajara - Business Details</title>
-    <meta name="description" content="&lt;p&gt;शुद्ध शाकाहारी फॅमिली रेस्टॉरंट .. &lt;/p&gt;&lt;p&gt; &lt;/p&gt;&lt;p&gt;शाकाहारी जेवणामध्ये घरगुती पद्धतीचे भोजन, रोटी, इडली डोसा, वडापाव, पुरी भाजी, चहा, भडंग उपलब्ध. नाष्टा करण्याचे एक प्रसिद्ध ठिकाण.&lt;/p&gt;">
+    <meta name="description" content="&lt;p&gt;आमच्याकडे पेस्टी केक, चॉकलेट केक, पायनापल, स्ट्राबेरी केक, व्हेज केक, ब्लॅक फॉरेस्ट यासरख्या विविध प्रकारच्या केकच्या ऑडर्स स्विकारल्या जातील. &lt;/p&gt;">
     <meta property="og:image" content="https://city.bizc.in/assets/images/YogitaHotelp1.jpg">
 
     <link rel="icon" type="image/png" href="https://city.bizc.in/assets/images/YogitaHotelp1.jpg">
@@ -761,10 +761,14 @@ a:hover {
   
   <script>
   document.addEventListener("DOMContentLoaded", function () {
-    const imageUrl = "https:\/\/city.bizc.in\/assets\/images\/YogitaHotelp1.jpg"; 
-    const div = document.getElementById("businessPhoto1");
+    
+    const ts = new Date().getTime();
+    const rawUrl = "https:\/\/city.bizc.in\/assets\/images\/YogitaHotelp1.jpg"; 
+    const imageUrl = rawUrl + (rawUrl.includes("?") ? "&" : "?") + "ts=" + ts;
 
+    const div = document.getElementById("businessPhoto1");
     const img = new Image();
+
     img.onload = function () {
       div.style.backgroundImage = `url('${imageUrl}')`;
       div.classList.add("show"); 
@@ -774,9 +778,11 @@ a:hover {
       div.classList.remove("show");
       div.style.border = "none"; 
     };
+
     img.src = imageUrl;
   });
 </script>
+
 
 
 <script>
@@ -983,7 +989,7 @@ document.addEventListener("click", async (e) => {
 	
 <script>
   
-  var businessDescription = `'\x3cp\x3eशुद्ध शाकाहारी फॅमिली रेस्टॉरंट .. \x3c\/p\x3e\x3cp\x3e \x3c\/p\x3e\x3cp\x3eशाकाहारी जेवणामध्ये घरगुती पद्धतीचे भोजन, रोटी, इडली डोसा, वडापाव, पुरी भाजी, चहा, भडंग उपलब्ध. नाष्टा करण्याचे एक प्रसिद्ध ठिकाण.\x3c\/p\x3e'`;
+  var businessDescription = `'\x3cp\x3eआमच्याकडे पेस्टी केक, चॉकलेट केक, पायनापल, स्ट्राबेरी केक, व्हेज केक, ब्लॅक फॉरेस्ट यासरख्या विविध प्रकारच्या केकच्या ऑडर्स स्विकारल्या जातील. \x3c\/p\x3e'`;
 
   
   businessDescription = businessDescription.replace(/^'(.*)'$/, "$1");
