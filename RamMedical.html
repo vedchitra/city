@@ -874,8 +874,9 @@ document.getElementById("whatsappForm").addEventListener("submit", function(e) {
 
 <script>
 const websiteLink          = "https:\/\/web.com";
-const emailID              = "";
+const emailID              = "medicine434@email.com";
 const businessNameEnglish  = "Ram Medical ";
+const phoneNumber          = "8888855224"; 
 
 
 document.title = businessNameEnglish + " - Business Details";
@@ -903,6 +904,15 @@ if (emailID && isValidEmail(emailID)) {
   contactHtml += `
     <a href="mailto:${emailID}" class="WE-icon">
       <i class="fas fa-envelope"></i> Email
+    </a>
+  `;
+}
+
+
+if (phoneNumber) {
+  contactHtml += `
+    <a href="tel:${phoneNumber}" class="WE-icon">
+      <i class="fas fa-phone"></i> Phone ${phoneNumber}
     </a>
   `;
 }
@@ -1022,13 +1032,14 @@ document.addEventListener("click", async (e) => {
 </script>
     
 	<script>
-      function generateVCF(personName, businessName, mobileNumber, businessAddress, websiteLink) {
+      function generateVCF(personName, businessName, mobileNumber, phoneNumber,businessAddress, websiteLink) {
         const vcf = [
           'BEGIN:VCARD',
           'VERSION:3.0',
           `FN:${personName}`,
           `ORG:${businessName}`,
           `TEL;TYPE=WORK,VOICE:${mobileNumber}`,
+		  `TEL;TYPE=CELL,VOICE:${phoneNumber}`,
           `ADR;TYPE=WORK:;;${businessAddress}`,
           `URL:${websiteLink}`,
           'END:VCARD'
@@ -1041,10 +1052,11 @@ document.addEventListener("click", async (e) => {
         const personName = "Ram Patil";
         const businessName = "Ram Medical ";
         const mobileNumber = "999998888";
+		const phoneNumber = "8888855224";
         const businessAddress = "Main Road, Ajara";
         const websiteLink = "https:\/\/web.com";
 
-        const vcfData = generateVCF(personName, businessName, mobileNumber, businessAddress, websiteLink);
+        const vcfData = generateVCF(personName, businessName, mobileNumber,  phoneNumber, businessAddress, websiteLink);
         const link = document.createElement('a');
         link.href = vcfData;
         link.download = 'business.vcf';
