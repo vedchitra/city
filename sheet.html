@@ -1,0 +1,95 @@
+<!-- save as aggregate_sheets.html आणि ब्राऊझरमध्ये उघडा -->
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>All Sheets Aggregate</title>
+  <style>
+    body{font-family: Arial; padding:20px}
+    .sheet{margin-bottom:24px; border:1px solid #ddd; padding:12px; border-radius:6px}
+    .title{font-weight:700; margin-bottom:8px}
+    table{border-collapse:collapse; width:100%}
+    th,td{border:1px solid #eee; padding:6px; text-align:left}
+    .loading{color:#666}
+  </style>
+</head>
+<body>
+  <h2>Aggregate of multiple Google Sheets</h2>
+  <div id="container"></div>
+
+<script>
+// === बदलायचे: खाली तुमचे spreadsheet IDs आणि (ऐच्छिक) gid ठेवा ===
+// Format: {id: "GOOGLE_SHEET_ID", gid: "0", name: "Sheet A"}
+// gid जर नसेल तर default 0 वापरला जाईल.
+const sheets = [
+  {id:"18-ppYoq7PrYboz3WerRChDzokv5K-_Eo9OmyB2mCTuQ", gid:"0", name:"Sheet 1"},
+  {id:"1_Eo4YYY2DkNwmSyMk52xvy4d_km9fTIjQcY4dAXL_-w", gid:"0", name:"Sheet 2"},
+  // ... एकूण 20 entries
+];
+
+const container = document.getElementById('container');
+
+function csvToArray(text){
+  // साधी CSV parser — quotes अँड escaped commas basic support
+  const rows = [];
+  const lines = text.split(/\r?\n/);
+  for(let r of lines){
+    if(r.trim()==="") continue;
+    const row = [];
+    let cur = '', inQuote = false;
+    for(let i=0;i<r.length;i++){
+      const ch = r[i];
+      if(ch === '"' ){
+        if(inQuote && r[i+1] === '"'){ cur += '"'; i++; }else{ inQuote = !inQuote; }
+      } else if(ch === ',' && !inQuote){
+        row.push(cur); cur = '';
+      } else { cur += ch; }
+    }
+    row.push(cur);
+    rows.push(row);
+  }
+  return rows;
+}
+
+async function fetchAndShow(sheet){
+  const block = document.createElement('div'); block.className='sheet';
+  block.innerHTML = `<div class="title">${sheet.name || sheet.id}</div><div class="loading">Loading...</div>`;
+  container.appendChild(block);
+
+  const url = `https://docs.google.com/spreadsheets/d/${sheet.id}/export?format=csv&gid=${sheet.gid||0}`;
+  try{
+    const resp = await fetch(url);
+    if(!resp.ok) throw new Error(resp.statusText);
+    const text = await resp.text();
+    const rows = csvToArray(text);
+    if(rows.length===0){ block.querySelector('.loading').innerText = 'No data'; return; }
+
+    const table = document.createElement('table');
+    const thead = document.createElement('thead');
+    const headerRow = document.createElement('tr');
+    rows[0].forEach(h=>{ const th=document.createElement('th'); th.textContent = h; headerRow.appendChild(th); });
+    thead.appendChild(headerRow);
+    table.appendChild(thead);
+
+    const tbody = document.createElement('tbody');
+    for(let i=1;i<rows.length;i++){
+      const tr = document.createElement('tr');
+      rows[i].forEach(cell=>{ const td=document.createElement('td'); td.textContent = cell; tr.appendChild(td); });
+      tbody.appendChild(tr);
+    }
+    table.appendChild(tbody);
+
+    block.innerHTML = `<div class="title">${sheet.name || sheet.id}</div>`;
+    block.appendChild(table);
+  }catch(err){
+    block.querySelector('.loading').innerText = `Error: ${err.message}. Make sure sheet is shared publicly or "Publish to web".`;
+  }
+}
+
+// start sequentially (or Promise.all for parallel)
+(async ()=>{
+  for(const s of sheets) await fetchAndShow(s);
+})();
+</script>
+</body>
+</html>
