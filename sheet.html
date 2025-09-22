@@ -1,75 +1,120 @@
 <!doctype html>
 <html>
 <head>
-  <meta charset="utf-8">
-  <title>Aggregate Sheets with Robust Date Filter</title>
-  <style>
-    body{font-family: Arial; padding:20px}
-    .controls{margin-bottom:16px}
-    .sheet{margin-bottom:18px; border:1px solid #ddd; padding:12px; border-radius:6px}
-    .title{font-weight:700; margin-bottom:8px}
-    table{border-collapse:collapse; width:100%}
-    th,td{border:1px solid #eee; padding:6px; text-align:left; font-size:13px}
-    .loading{color:#666}
-    button{margin-left:8px}
-  </style>
+<meta charset="utf-8">
+<title>Aggregate Sheets — Robust Date Filter + Debug</title>
+<style>
+  body{font-family:Arial;padding:16px}
+  .controls{margin-bottom:12px}
+  .sheet{margin-bottom:18px;border:1px solid #ddd;padding:10px;border-radius:6px}
+  .title{font-weight:700;margin-bottom:6px}
+  table{border-collapse:collapse;width:100%}
+  th,td{border:1px solid #eee;padding:6px;text-align:left;font-size:13px}
+  .small{font-size:12px;color:#555}
+  .err{color:#c00}
+  .ok{color:green}
+  .debug{background:#f9f9f9;padding:8px;margin-top:8px;border-radius:6px;font-size:13px}
+  pre{white-space:pre-wrap; word-break:break-word}
+</style>
 </head>
 <body>
-  <h2>Aggregated Sheets — Date Filter</h2>
+  <h3>Aggregated Sheets — Robust Date Filter + Debug</h3>
 
   <div class="controls">
     <label>Select Date: <input type="date" id="dateFilter"></label>
-    <button id="clearBtn" type="button">Clear</button>
-    <span id="totalCount" style="margin-left:18px; font-weight:700">Total Rows: 0</span>
+    <select id="dateMode">
+      <option value="auto">Auto detect (recommended)</option>
+      <option value="dmy">Assume DD/MM/YYYY</option>
+      <option value="mdy">Assume MM/DD/YYYY</option>
+      <option value="ymd">Assume YYYY/MM/DD</option>
+    </select>
+    <button id="clearBtn">Clear</button>
+    <label style="margin-left:12px" title="Show extra debug info"><input type="checkbox" id="showDebug"> Show debug</label>
+    <span id="totalCount" style="margin-left:18px;font-weight:700">Total Rows: 0</span>
   </div>
 
+  <div id="status" class="small">Loading sheets...</div>
   <div id="container"></div>
 
 <script>
-/* === बदलायचे === */
+/* ====== बदलायचे — तुमचे 20 spreadsheet IDs ====== */
 const sheets = [
   {id:"1_Eo4YYY2DkNwmSyMk52xvy4d_km9fTIjQcY4dAXL_-w", gid:"0", name:"Sheet 1"},
   {id:"18-ppYoq7PrYboz3WerRChDzokv5K-_Eo9OmyB2mCTuQ", gid:"0", name:"Sheet 2"},
-  // ... बाकी 20 IDs
+  // ... बाकी 20
 ];
-/* ================= */
+/* ================================================= */
 
 const container = document.getElementById('container');
+const status = document.getElementById('status');
 const totalCountEl = document.getElementById('totalCount');
-let allData = []; // {sheetName, headers, rows}
+const dateInput = document.getElementById('dateFilter');
+const dateModeSel = document.getElementById('dateMode');
+const showDebugChk = document.getElementById('showDebug');
+
+let allData = []; // {sheetName, headers, rows: [[],...], meta:{fetched, error, sampleCells:[...], detectedDateCol}}
 
 function pad(n){ return String(n).padStart(2,'0'); }
 
-// Normalize many date formats -> "YYYY-MM-DD" or return null if not a date
-function normalizeDateCell(cell){
+// try to convert Google/Excel serial-like numeric to date (best-effort)
+function serialToYMD(num){
+  if(isNaN(num)) return null;
+  // Google Sheets epoch 1899-12-30
+  const epoch = Date.UTC(1899,11,30);
+  const days = Number(num);
+  const ms = Math.round(days * 86400000);
+  const dt = new Date(epoch + ms);
+  if(isNaN(dt.getTime())) return null;
+  return `${dt.getUTCFullYear()}-${pad(dt.getUTCMonth()+1)}-${pad(dt.getUTCDate())}`;
+}
+
+// Normalize many formats -> "YYYY-MM-DD" or null
+function normalizeDateCell(cell, prefer){
   if(cell === null || cell === undefined) return null;
   let s = String(cell).trim();
   if(!s) return null;
-  // remove time part if present
-  s = s.split(' ')[0].trim();
-
-  // 1) YYYY-MM-DD or YYYY/MM/DD
-  let m = s.match(/^(\d{4})[-\/](\d{1,2})[-\/](\d{1,2})$/);
-  if(m){
-    const yyyy = m[1], mm = pad(m[2]), dd = pad(m[3]);
-    return `${yyyy}-${mm}-${dd}`;
+  // remove wrapping quotes
+  if(s.startsWith('"') && s.endsWith('"')) s = s.slice(1,-1).trim();
+  // if pure number (maybe serial)
+  if(/^\d+(\.\d+)?$/.test(s)){
+    const maybe = serialToYMD(Number(s));
+    if(maybe) return maybe;
   }
-  // 2) DD/MM/YYYY or MM/DD/YYYY -> assume DD/MM/YYYY (Indian)
-  m = s.match(/^(\d{1,2})[-\/](\d{1,2})[-\/](\d{4})$/);
+  // remove time component
+  s = s.split('T')[0].split(' ')[0].trim();
+  // normalize separators
+  s = s.replace(/\./g,'/').replace(/-/g,'/').replace(/\\/g,'/');
+  // common: YYYY/MM/DD
+  let m = s.match(/^(\d{4})\/(\d{1,2})\/(\d{1,2})$/);
+  if(m) return `${m[1]}-${pad(m[2])}-${pad(m[3])}`;
+  // DD/MM/YYYY or MM/DD/YYYY
+  m = s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
   if(m){
-    const dd = pad(m[1]), mm = pad(m[2]), yyyy = m[3];
-    return `${yyyy}-${mm}-${dd}`;
+    if(prefer === 'ymd'){ // unlikely here, but handle
+      return `${m[3]}-${pad(m[2])}-${pad(m[1])}`;
+    } else if(prefer === 'dmy'){
+      return `${m[3]}-${pad(m[2])}-${pad(m[1])}`;
+    } else if(prefer === 'mdy'){
+      return `${m[3]}-${pad(m[1])}-${pad(m[2])}`;
+    } else {
+      // auto: guess - if first >12 treat as day
+      const a = Number(m[1]), b = Number(m[2]);
+      if(a > 12) return `${m[3]}-${pad(m[2])}-${pad(m[1])}`; // dd/mm/yyyy
+      // ambiguous: assume DD/MM/YYYY for Indian locale
+      return `${m[3]}-${pad(m[2])}-${pad(m[1])}`;
+    }
   }
-  // 3) Try JS Date parse (for ISO or other parseable strings)
-  const dt = new Date(s);
-  if(!isNaN(dt.getTime())){
-    const yyyy = dt.getFullYear(), mm = pad(dt.getMonth()+1), dd = pad(dt.getDate());
+  // month name formats e.g. "20 Sep 2025" or "Sep 20 2025"
+  const dtTry = new Date(s);
+  if(!isNaN(dtTry.getTime())){
+    // Use local date (but convert to y-m-d)
+    const yyyy = dtTry.getFullYear(), mm = pad(dtTry.getMonth()+1), dd = pad(dtTry.getDate());
     return `${yyyy}-${mm}-${dd}`;
   }
   return null;
 }
 
-// Simple CSV parser (basic quotes support)
+// Basic CSV parser with quotes support
 function csvToArray(text){
   const rows=[];
   const lines = text.split(/\r?\n/);
@@ -92,41 +137,179 @@ function csvToArray(text){
   return rows;
 }
 
-async function fetchAndStore(sheet){
-  const url = `https://docs.google.com/spreadsheets/d/${sheet.id}/export?format=csv&gid=${sheet.gid||0}`;
+async function fetchSheet(s){
+  const url = `https://docs.google.com/spreadsheets/d/${s.id}/export?format=csv&gid=${s.gid||0}`;
+  const meta = {fetched:false, error:null, sampleCells:[], detectedDateCol:-1, rawHead: null};
   try{
     const resp = await fetch(url);
-    if(!resp.ok) throw new Error('HTTP ' + resp.status);
-    const text = await resp.text();
-    const rows = csvToArray(text);
-    if(rows.length>0){
-      allData.push({
-        sheetName: sheet.name || sheet.id,
-        headers: rows[0],
-        rows: rows.slice(1)
-      });
-    } else {
-      allData.push({
-        sheetName: sheet.name || sheet.id,
-        headers: [],
-        rows: []
-      });
+    if(!resp.ok){
+      meta.error = `HTTP ${resp.status} ${resp.statusText}`;
+      return {s, meta, rows:[]};
     }
+    const text = await resp.text();
+    // detect HTML/login page
+    const tstart = text.trim().slice(0,200).toLowerCase();
+    if(tstart.startsWith('<') || text.toLowerCase().includes('sign in') || !text.includes(',')){
+      meta.error = 'Response not CSV — likely sheet is private or not published. Response begins with HTML or missing commas.';
+      meta.sampleHtml = text.trim().slice(0,800);
+      return {s, meta, rows:[]};
+    }
+    const rows = csvToArray(text);
+    meta.fetched=true;
+    meta.rawHead = rows.length? rows[0] : null;
+    // detect date-like header
+    const dateCol = meta.rawHead ? meta.rawHead.findIndex(h => /\b(date|added|created|on)\b/i.test(h)) : -1;
+    meta.detectedDateCol = dateCol;
+    // sample some cells for debug
+    if(rows.length>1){
+      for(let i=1; i<Math.min(rows.length, 10); i++){
+        meta.sampleCells.push(rows[i].slice(0,6)); // first few cols
+      }
+    }
+    return {s, meta, rows};
   }catch(err){
-    // store as empty with error note
-    allData.push({
-      sheetName: sheet.name || sheet.id,
-      headers: ["Error"],
-      rows: [[`Could not fetch (${err.message}). Make sheet public or Publish to web.`]]
-    });
+    meta.error = `Fetch error: ${err.message}`;
+    return {s, meta, rows:[]};
   }
 }
 
-function renderData(filterDate){ // filterDate is in "YYYY-MM-DD" (from input) or null
+async function loadAll(){
+  container.innerHTML='';
+  totalCountEl.textContent = 'Total Rows: 0';
+  status.textContent = 'Fetching sheets...';
+  allData = [];
+  for(const s of sheets){
+    const block = document.createElement('div'); block.className='sheet';
+    block.innerHTML = `<div class="title">${s.name || s.id}</div><div class="small">Fetching...</div>`;
+    container.appendChild(block);
+  }
+
+  const results = [];
+  for(const s of sheets){
+    const res = await fetchSheet(s);
+    results.push(res);
+    // update UI per-sheet quickly
+    const idx = results.length-1;
+    const block = container.children[idx];
+    block.innerHTML = `<div class="title">${s.name || s.id}</div>`;
+    if(res.meta.error){
+      block.innerHTML += `<div class="err">Error: ${res.meta.error}</div>`;
+      if(res.meta.sampleHtml){
+        const pre = document.createElement('pre'); pre.textContent = res.meta.sampleHtml; pre.style.maxHeight='160px'; pre.style.overflow='auto';
+        block.appendChild(pre);
+      }
+      allData.push({sheetName: s.name||s.id, headers: res.meta.rawHead || [], rows: [], meta:res.meta});
+      continue;
+    }
+    const rows = res.rows;
+    const headers = rows.length? rows[0]: [];
+    const bodyRows = rows.slice(1);
+    block.innerHTML += `<div class="small">Rows fetched: ${bodyRows.length}</div>`;
+    // show small sample
+    if(res.meta.sampleCells && res.meta.sampleCells.length){
+      const pre = document.createElement('pre'); pre.className='debug'; pre.textContent = 'Sample rows (first cols):\n' + res.meta.sampleCells.map(r=>r.join(' | ')).join('\n');
+      block.appendChild(pre);
+    }
+    allData.push({sheetName: s.name||s.id, headers, rows: bodyRows, meta:res.meta});
+  }
+
+  status.textContent = 'All sheets loaded (see per-sheet blocks).';
+  renderData(null);
+}
+
+function renderData(filterDate){
   container.innerHTML = '';
   let total = 0;
-  const normalizedFilter = filterDate ? filterDate : null;
-
+  const prefer = (dateModeSel.value === 'auto' ? null : dateModeSel.value);
   allData.forEach(data=>{
     const block = document.createElement('div'); block.className='sheet';
-    const title = document.createElement('div'); title.className=
+    const title = document.createElement('div'); title.className='title'; title.textContent = data.sheetName;
+    block.appendChild(title);
+
+    if(data.meta && data.meta.error){
+      block.appendChild(Object.assign(document.createElement('div'), {innerHTML:`<span class="err">Error: ${data.meta.error}</span>`}));
+      if(showDebugChk.checked && data.meta.sampleHtml){
+        const pre = document.createElement('pre'); pre.textContent = data.meta.sampleHtml;
+        block.appendChild(pre);
+      }
+      container.appendChild(block);
+      return;
+    }
+
+    if(!data.headers || data.headers.length===0){
+      block.appendChild(Object.assign(document.createElement('div'), {textContent:'No data'}));
+      container.appendChild(block);
+      return;
+    }
+
+    // Build table
+    const table = document.createElement('table');
+    const thead = document.createElement('thead');
+    const hr = document.createElement('tr');
+    data.headers.forEach(h=>{ const th=document.createElement('th'); th.textContent = h; hr.appendChild(th); });
+    thead.appendChild(hr); table.appendChild(thead);
+    const tbody = document.createElement('tbody');
+
+    // find date column if any
+    const dateColIndex = data.headers.findIndex(h => /\b(date|added|created|on)\b/i.test(h));
+    // For debug: collect first 5 normalized samples
+    const normSamples = [];
+
+    data.rows.forEach(row=>{
+      let include = true;
+      if(filterDate){
+        if(dateColIndex >= 0){
+          const norm = normalizeDateCell(row[dateColIndex], prefer);
+          normSamples.push(norm || '(null)');
+          if(norm !== filterDate) include = false;
+        } else {
+          // fallback: search any cell
+          const foundMatch = row.some(c => normalizeDateCell(c, prefer) === filterDate);
+          // also collect some normalized cells for debug
+          const foundSome = row.map(c => normalizeDateCell(c, prefer)).filter(x=>x);
+          normSamples.push(foundSome[0]||'(null)');
+          if(!foundMatch) include = false;
+        }
+      } else {
+        // still collect sample few
+        if(dateColIndex >= 0) normSamples.push(normalizeDateCell(row[dateColIndex], prefer) || '(null)');
+      }
+      if(include){
+        const tr = document.createElement('tr');
+        row.forEach(c=>{ const td=document.createElement('td'); td.textContent = c; tr.appendChild(td); });
+        tbody.appendChild(tr);
+        total++;
+      }
+    });
+
+    table.appendChild(tbody);
+    block.appendChild(table);
+
+    if(showDebugChk.checked){
+      const dbg = document.createElement('div'); dbg.className='debug';
+      dbg.innerHTML = '<b>Debug:</b><br>' +
+        `Detected date column index: ${dateColIndex} <br>` +
+        `Normalized sample values (first rows):<br><pre>${normSamples.slice(0,8).join('\n')||'(none)'}</pre>`;
+      block.appendChild(dbg);
+    }
+
+    container.appendChild(block);
+  });
+
+  totalCountEl.textContent = `Total Rows: ${total}`;
+}
+
+// INIT
+loadAll();
+
+// events
+dateInput.addEventListener('change', ()=> renderData(dateInput.value || null));
+dateModeSel.addEventListener('change', ()=> renderData(dateInput.value || null));
+document.getElementById('clearBtn').addEventListener('click', ()=>{
+  dateInput.value = '';
+  renderData(null);
+});
+showDebugChk.addEventListener('change', ()=> renderData(dateInput.value || null));
+</script>
+</body>
+</html>
