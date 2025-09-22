@@ -2,52 +2,88 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>All Sheets Aggregate with Date Filter</title>
+  <title>Aggregate Sheets with Robust Date Filter</title>
   <style>
     body{font-family: Arial; padding:20px}
-    .sheet{margin-bottom:24px; border:1px solid #ddd; padding:12px; border-radius:6px}
+    .controls{margin-bottom:16px}
+    .sheet{margin-bottom:18px; border:1px solid #ddd; padding:12px; border-radius:6px}
     .title{font-weight:700; margin-bottom:8px}
     table{border-collapse:collapse; width:100%}
-    th,td{border:1px solid #eee; padding:6px; text-align:left}
+    th,td{border:1px solid #eee; padding:6px; text-align:left; font-size:13px}
     .loading{color:#666}
-    .controls{margin-bottom:20px}
-    #totalCount{font-weight:bold; margin-left:20px}
+    button{margin-left:8px}
   </style>
 </head>
 <body>
-  <h2>Aggregate of multiple Google Sheets</h2>
+  <h2>Aggregated Sheets — Date Filter</h2>
 
   <div class="controls">
     <label>Select Date: <input type="date" id="dateFilter"></label>
-    <span id="totalCount">Total Rows: 0</span>
+    <button id="clearBtn" type="button">Clear</button>
+    <span id="totalCount" style="margin-left:18px; font-weight:700">Total Rows: 0</span>
   </div>
 
   <div id="container"></div>
 
 <script>
+/* === बदलायचे === */
 const sheets = [
   {id:"1_Eo4YYY2DkNwmSyMk52xvy4d_km9fTIjQcY4dAXL_-w", gid:"0", name:"Sheet 1"},
   {id:"18-ppYoq7PrYboz3WerRChDzokv5K-_Eo9OmyB2mCTuQ", gid:"0", name:"Sheet 2"},
-  // ... तुमचे 20 IDs इथे
+  // ... बाकी 20 IDs
 ];
+/* ================= */
 
 const container = document.getElementById('container');
 const totalCountEl = document.getElementById('totalCount');
-let allData = [];  // {sheetName, headers, rows}
+let allData = []; // {sheetName, headers, rows}
 
+function pad(n){ return String(n).padStart(2,'0'); }
+
+// Normalize many date formats -> "YYYY-MM-DD" or return null if not a date
+function normalizeDateCell(cell){
+  if(cell === null || cell === undefined) return null;
+  let s = String(cell).trim();
+  if(!s) return null;
+  // remove time part if present
+  s = s.split(' ')[0].trim();
+
+  // 1) YYYY-MM-DD or YYYY/MM/DD
+  let m = s.match(/^(\d{4})[-\/](\d{1,2})[-\/](\d{1,2})$/);
+  if(m){
+    const yyyy = m[1], mm = pad(m[2]), dd = pad(m[3]);
+    return `${yyyy}-${mm}-${dd}`;
+  }
+  // 2) DD/MM/YYYY or MM/DD/YYYY -> assume DD/MM/YYYY (Indian)
+  m = s.match(/^(\d{1,2})[-\/](\d{1,2})[-\/](\d{4})$/);
+  if(m){
+    const dd = pad(m[1]), mm = pad(m[2]), yyyy = m[3];
+    return `${yyyy}-${mm}-${dd}`;
+  }
+  // 3) Try JS Date parse (for ISO or other parseable strings)
+  const dt = new Date(s);
+  if(!isNaN(dt.getTime())){
+    const yyyy = dt.getFullYear(), mm = pad(dt.getMonth()+1), dd = pad(dt.getDate());
+    return `${yyyy}-${mm}-${dd}`;
+  }
+  return null;
+}
+
+// Simple CSV parser (basic quotes support)
 function csvToArray(text){
-  const rows = [];
+  const rows=[];
   const lines = text.split(/\r?\n/);
-  for(let r of lines){
-    if(r.trim()==="") continue;
-    const row = [];
-    let cur = '', inQuote = false;
-    for(let i=0;i<r.length;i++){
-      const ch = r[i];
-      if(ch === '"' ){
-        if(inQuote && r[i+1] === '"'){ cur += '"'; i++; }else{ inQuote = !inQuote; }
+  for(const line of lines){
+    if(line.trim()==='') continue;
+    const row=[];
+    let cur='', inQuote=false;
+    for(let i=0;i<line.length;i++){
+      const ch=line[i];
+      if(ch === '"'){
+        if(inQuote && line[i+1] === '"'){ cur += '"'; i++; }
+        else { inQuote = !inQuote; }
       } else if(ch === ',' && !inQuote){
-        row.push(cur); cur = '';
+        row.push(cur); cur='';
       } else { cur += ch; }
     }
     row.push(cur);
@@ -58,66 +94,39 @@ function csvToArray(text){
 
 async function fetchAndStore(sheet){
   const url = `https://docs.google.com/spreadsheets/d/${sheet.id}/export?format=csv&gid=${sheet.gid||0}`;
-  const resp = await fetch(url);
-  const text = await resp.text();
-  const rows = csvToArray(text);
-  if(rows.length>0){
+  try{
+    const resp = await fetch(url);
+    if(!resp.ok) throw new Error('HTTP ' + resp.status);
+    const text = await resp.text();
+    const rows = csvToArray(text);
+    if(rows.length>0){
+      allData.push({
+        sheetName: sheet.name || sheet.id,
+        headers: rows[0],
+        rows: rows.slice(1)
+      });
+    } else {
+      allData.push({
+        sheetName: sheet.name || sheet.id,
+        headers: [],
+        rows: []
+      });
+    }
+  }catch(err){
+    // store as empty with error note
     allData.push({
       sheetName: sheet.name || sheet.id,
-      headers: rows[0],
-      rows: rows.slice(1)
+      headers: ["Error"],
+      rows: [[`Could not fetch (${err.message}). Make sheet public or Publish to web.`]]
     });
   }
 }
 
-function renderData(filterDate){
+function renderData(filterDate){ // filterDate is in "YYYY-MM-DD" (from input) or null
   container.innerHTML = '';
   let total = 0;
+  const normalizedFilter = filterDate ? filterDate : null;
+
   allData.forEach(data=>{
     const block = document.createElement('div'); block.className='sheet';
-    const title = document.createElement('div'); title.className='title'; title.textContent=data.sheetName;
-    block.appendChild(title);
-
-    const table = document.createElement('table');
-    const thead = document.createElement('thead');
-    const headerRow = document.createElement('tr');
-    data.headers.forEach(h=>{ const th=document.createElement('th'); th.textContent = h; headerRow.appendChild(th); });
-    thead.appendChild(headerRow); table.appendChild(thead);
-
-    const tbody = document.createElement('tbody');
-
-    // 🟢 filter लागू
-    let dateColIndex = data.headers.findIndex(h=>/date/i.test(h)); // column नावात "Date" असेल तर
-    data.rows.forEach(row=>{
-      let include = true;
-      if(filterDate && dateColIndex>=0){
-        let cellDate = row[dateColIndex].trim().split(" ")[0]; // yyyy-mm-dd किंवा dd/mm/yyyy असल्यास parse करता येईल
-        if(cellDate !== filterDate) include = false;
-      }
-      if(include){
-        const tr = document.createElement('tr');
-        row.forEach(c=>{ const td=document.createElement('td'); td.textContent=c; tr.appendChild(td); });
-        tbody.appendChild(tr);
-        total++;
-      }
-    });
-
-    table.appendChild(tbody);
-    block.appendChild(table);
-    container.appendChild(block);
-  });
-  totalCountEl.textContent = `Total Rows: ${total}`;
-}
-
-(async ()=>{
-  for(const s of sheets) await fetchAndStore(s);
-  renderData(null);
-})();
-
-// calendar filter event
-document.getElementById('dateFilter').addEventListener('change', e=>{
-  renderData(e.target.value);
-});
-</script>
-</body>
-</html>
+    const title = document.createElement('div'); title.className=
